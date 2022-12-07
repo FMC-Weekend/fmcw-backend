@@ -105,7 +105,104 @@ app.set('view engine', 'ejs');
 //   // Pass to next layer of middleware
 //   next();
 // });
+//Admin DashBoard
 
+const Details=[];
+var total;
+var totalOrders=0;
+var totalPayments=0;
+const http = require("https");
+app.get("/admindashboard", function(req, res) {
+  res.render("adminDashboard", {
+      Details: Details,
+      total:total,
+      totalOrders:totalOrders,
+      totalPayments:totalPayments
+      // users:Details.length,
+          // x: x
+  });
+
+});
+app.get("/admindashboarduser", function(req, res) {
+  res.render("users", {
+      Details: Details,
+      // users:Details.length,
+          // x: x
+  });
+
+});
+const options = {
+  "method": "GET",
+  "hostname": "fmcw-backend1.onrender.com",
+  "port": null,
+  "path": "/api/alluser",
+  "headers": {
+    "Accept": "*/*",
+  }
+};
+
+const req = http.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    const n=body.toString();
+    // console.log(n[10001]);
+    const k=JSON.parse(n);
+    // console.log(k.data.length);
+    total=k.data.length;
+  
+    for (let index = 0; index <k.data.length; index++) {
+      // console.log(k.data[index].userCart.cartItems.length);
+      totalOrders=totalOrders+k.data[index].userCart.cartItems.length;
+      const detail={  
+        name:k.data[index].name,
+        email:k.data[index].email,
+        college:k.data[index].college,
+        instaHandle:k.data[index].instaHandle,
+        number:k.data[index].number,
+        yearOfStudy:k.data[index].yearOfStudy,
+        id:k.data[index]._id,
+        cartItems:k.data[index].userCart.cartItems
+        
+        }
+        Details.push(detail);
+      // console.log(totalOrders);
+      for(let j = 0; j <k.data[index].userCart.cartItems.length; j++){
+        // console.log(k.data[index].email);
+        // console.log(k.data[index].name);
+        totalPayments=totalPayments+k.data[index].userCart.cartItems[j].price
+        // console.log(k.data[index].userCart.cartItems[j].price)
+        // console.log(k.data[index].userCart.cartItems[j].title)
+        // const loopdetail={
+        //   price:k.data[index].userCart.cartItems[j].price,
+        //   title:k.data[index].userCart.cartItems[j].title,
+        //   verifyStatus:k.data[index].userCart.cartItems[j].verifyStatus,
+
+        // }
+        // Details[index].cartItems.push(loopdetail);
+
+        // Details[index].push(loopdetail);
+        // console.log(Details[index].cartItems)
+        // console.log(totalPayments)
+       
+        // for(let j = 0; j <k.data.length; j++){
+          
+        // }
+        // console.log(k.data[0].userCart.cartItems[0]);
+       
+    }
+    // console.log(k.data[0].userCart.cartItems[0].title);
+    
+      }
+  });
+});
+
+req.end();
 //ROUTERS
 const rout = require('./routers/index.router.js');
 const eventrout = require('./routers/event.router.js');
@@ -115,6 +212,10 @@ const userrout= require('./routers/user.router');
 const cartrout= require('./routers/cart.router');         
 const paymentrout = require('./services/instamojoPayment');
 const mailrout = require('./routers/mail.router');
+
+
+
+
 // ROUTES
 app.get('/api/test', (req, res) => {
   res.json({message: 'API Running successfully'});
@@ -136,9 +237,7 @@ app.all('*', (req, res) => {
     message: 'Given route does not exist'
   })
 })
-
 // const decrypted = CryptoJS.AES.decrypt(encrypted, "Message").toString(CryptoJS.enc.Utf8);
-
 // DATABASE CONNECTION
 const DB = process.env.DATABASE;
 mongoose.connect(DB, {
@@ -151,7 +250,8 @@ mongoose.connect(DB, {
   console.log(err);
 })
 
+
 // APP SETUP
 app.listen(process.env.PORT || 8000, function (err, result) {
-  console.log("Server is running at port!");
+  console.log(`Server is running at port! ${process.env.PORT}`);
 });

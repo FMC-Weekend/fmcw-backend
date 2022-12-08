@@ -131,6 +131,9 @@ app.get("/admindashboarduser", function(req, res) {
   });
 
 });
+// app.get("/orders",function(req,res){
+//   res.render("orders")
+// })
 const options = {
   "method": "GET",
   "hostname": "fmcw-backend1.onrender.com",
@@ -158,44 +161,102 @@ const req = http.request(options, function (res) {
   
     for (let index = 0; index <k.data.length; index++) {
       // console.log(k.data[index].userCart.cartItems.length);
-      totalOrders=totalOrders+k.data[index].userCart.cartItems.length;
-      const detail={  
-        name:k.data[index].name,
-        email:k.data[index].email,
-        college:k.data[index].college,
-        instaHandle:k.data[index].instaHandle,
-        number:k.data[index].number,
-        yearOfStudy:k.data[index].yearOfStudy,
-        id:k.data[index]._id,
-        cartItems:k.data[index].userCart.cartItems
+      // console.log(k.data[index].userCart)
+      var detail={  
+        // name:k.data[index].name,
+        // email:k.data[index].email,
+        // college:k.data[index].college,
+        // instaHandle:k.data[index].instaHandle,
+        // number:k.data[index].number,
+        // yearOfStudy:k.data[index].yearOfStudy,
+        // id:k.data[index]._id,
+      
         
         }
+        // if(k.data[index].userCart===null){
+        //   detail={
+        //     cartItems:[]
+        //   }
+        // }
+        if(k.data[index].userCart!=null){
+
+detail={
+  name:k.data[index].name,
+  email:k.data[index].email,
+  college:k.data[index].college,
+  instaHandle:k.data[index].instaHandle,
+  number:k.data[index].number,
+  yearOfStudy:k.data[index].yearOfStudy,
+  id:k.data[index]._id,
+  cartItems:k.data[index].userCart.cartItems
+}
+totalOrders=totalOrders+k.data[index].userCart.cartItems.length;
+for(let j = 0; j <k.data[index].userCart.cartItems.length; j++){
+  //     // console.log(k.data[index].email);
+  //     // console.log(k.data[index].name);
+      totalPayments=totalPayments+k.data[index].userCart.cartItems[j].price
+  //     // console.log(k.data[index].userCart.cartItems[j].price)
+  //     // console.log(k.data[index].userCart.cartItems[j].title)
+  //     // const loopdetail={
+  //     //   price:k.data[index].userCart.cartItems[j].price,
+  //     //   title:k.data[index].userCart.cartItems[j].title,
+  //     //   verifyStatus:k.data[index].userCart.cartItems[j].verifyStatus,
+
+  //     // }
+  //     // Details[index].cartItems.push(loopdetail);
+
+  //     // Details[index].push(loopdetail);
+  //     // console.log(Details[index].cartItems)
+  //     // console.log(totalPayments)
+     
+  //     // for(let j = 0; j <k.data.length; j++){
+        
+  //     // }
+  //     // console.log(k.data[0].userCart.cartItems[0]);
+     
+  }
+        }
+        else{
+          detail={
+            name:k.data[index].name,
+            email:k.data[index].email,
+            college:k.data[index].college,
+            instaHandle:k.data[index].instaHandle,
+            number:k.data[index].number,
+            yearOfStudy:k.data[index].yearOfStudy,
+            id:k.data[index]._id,
+            cartItems:[]
+          }
+        }
+        // totalOrders=totalOrders+k.data[index].userCart.cartItems.length;
         Details.push(detail);
+        // console.log(Details)
       // console.log(totalOrders);
-      for(let j = 0; j <k.data[index].userCart.cartItems.length; j++){
-        // console.log(k.data[index].email);
-        // console.log(k.data[index].name);
-        totalPayments=totalPayments+k.data[index].userCart.cartItems[j].price
-        // console.log(k.data[index].userCart.cartItems[j].price)
-        // console.log(k.data[index].userCart.cartItems[j].title)
-        // const loopdetail={
-        //   price:k.data[index].userCart.cartItems[j].price,
-        //   title:k.data[index].userCart.cartItems[j].title,
-        //   verifyStatus:k.data[index].userCart.cartItems[j].verifyStatus,
+      
+    //   for(let j = 0; j <k.data[index].userCart.cartItems.length; j++){
+    //     // console.log(k.data[index].email);
+    //     // console.log(k.data[index].name);
+    //     totalPayments=totalPayments+k.data[index].userCart.cartItems[j].price
+    //     // console.log(k.data[index].userCart.cartItems[j].price)
+    //     // console.log(k.data[index].userCart.cartItems[j].title)
+    //     // const loopdetail={
+    //     //   price:k.data[index].userCart.cartItems[j].price,
+    //     //   title:k.data[index].userCart.cartItems[j].title,
+    //     //   verifyStatus:k.data[index].userCart.cartItems[j].verifyStatus,
 
-        // }
-        // Details[index].cartItems.push(loopdetail);
+    //     // }
+    //     // Details[index].cartItems.push(loopdetail);
 
-        // Details[index].push(loopdetail);
-        // console.log(Details[index].cartItems)
-        // console.log(totalPayments)
+    //     // Details[index].push(loopdetail);
+    //     // console.log(Details[index].cartItems)
+    //     // console.log(totalPayments)
        
-        // for(let j = 0; j <k.data.length; j++){
+    //     // for(let j = 0; j <k.data.length; j++){
           
-        // }
-        // console.log(k.data[0].userCart.cartItems[0]);
+    //     // }
+    //     // console.log(k.data[0].userCart.cartItems[0]);
        
-    }
+    // }
     // console.log(k.data[0].userCart.cartItems[0].title);
     
       }

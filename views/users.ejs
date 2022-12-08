@@ -1,241 +1,232 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
 <style>
-     @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap');
-    
-     * {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
-.text1{
-    margin: auto;
-}
-a {
-	text-decoration: none;
+	@import url('https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap');
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  font-family: 'Josefin Sans', sans-serif;
 }
 
-li {
-	list-style: none;
+body{
+   background-color: #f3f3f3;
 }
 
-:root {
-	--poppins: 'Poppins', sans-serif;
-	--lato: 'Lato', sans-serif;
-
-	--light: #F9F9F9;
-	--blue: #3C91E6;
-	--light-blue: #CFE8FF;
-	--grey: #eee;
-	--dark-grey: #AAAAAA;
-	--dark: #342E37;
-	--red: #DB504A;
-	--yellow: #FFCE26;
-	--light-yellow: #FFF2C6;
-	--orange: #FD7238;
-	--light-orange: #FFE0D3;
+.wrapper{
+  /* position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%); */
+  /* width: 450px; */
+  border-color: black;
+  display: flex;
+  box-shadow: 0 1px 20px 0 rgba(69,90,100,.08);
 }
 
-html {
-	overflow-x: hidden;
+.wrapper .left{
+  width: 35%;
+  background-image: -webkit-linear-gradient(65deg, #A683E3 50%, #E4E9FD 50%);
+  padding: 30px 25px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  text-align: center;
+  color: rgb(27, 25, 25);
 }
 
-body.dark {
-	--light: #0C0C1E;
-	--grey: #060714;
-	--dark: #FBFBFB;
+.wrapper .left img{
+  border-radius: 5px;
+  margin-bottom: 10px;
 }
 
-body {
-	background: var(--grey);
-	overflow-x: hidden;
-}
-/* .titlediv{
-    min-height: 150px;
-    background-color: #3C91E6;
-} */
-.title{
-    background-color: #DB504A;
+.wrapper .left h4{
+  margin-bottom: 10px;
 }
 
- .name{
-        min-width: 150px;
-        min-height: 150px;
-        background-color: rgb(168, 166, 207);
-        border-radius: 5px;
-    }
-    .email{
-        min-width: 300px;
-        min-height: 150px;
-        background-color: rgb(168, 166, 207);
-        border-radius: 5px;
-    }
-    .college,.number,.insta{
-        max-width: 200px;
-        min-height: 150px;
-        background-color: rgb(168, 166, 207);
-        border-radius: 5px;
-    }
-    .year{
-        max-width: 150px;
-        background-color: rgb(168, 166, 207);
-        border-radius: 5px;
-    }
-    .subtitle{
-        background-color: rgb(65, 158, 107);
-        border-radius: 5px;
-    }
-    #sidebar {
-	position: fixed;
-	top: 0;
-	left: 0;
-	/* width: 280px; */
-	height: 100%;
-	background: var(--light);
-	z-index: 2000;
-	font-family: var(--lato);
-	transition: .3s ease;
-	overflow-x: hidden;
-	scrollbar-width: none;
+.wrapper .left p{
+  font-size: 12px;
 }
-#sidebar::--webkit-scrollbar {
-	display: none;
+
+.wrapper .right{
+  width: 65%;
+  background:powderblue;
+  padding: 30px 25px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
-#sidebar.hide {
-	width: 60px;
+
+.wrapper .right .info,
+.wrapper .right .projects{
+  margin-bottom: 25px;
+  border-radius: 10px;
+  /* background-image: -webkit-linear-gradient(65deg, #a198af 50%, #73919c 50%); */
+ 
 }
-#sidebar .brand {
-	font-size: 24px;
-	font-weight: 700;
-	height: 56px;
-	display: flex;
-	align-items: center;
-	color: var(--blue);
-	position: sticky;
-	top: 0;
-	left: 0;
-	background: var(--light);
-	z-index: 500;
-	padding-bottom: 20px;
-	box-sizing: content-box;
+
+.wrapper .right .info h3,
+.wrapper .right .projects h3{
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #e0e0e0;
+    color: #020202;
+  text-transform: uppercase;
+  letter-spacing: 5px;
 }
-#sidebar .brand .bx {
-	min-width: 60px;
-	display: flex;
-	justify-content: center;
+
+.wrapper .right .info_data,
+.wrapper .right .projects_data{
+  display: flex;
+  justify-content: space-between;
 }
-#sidebar .side-menu {
-	width: 100%;
-	margin-top: 48px;
+
+.wrapper .right .info_data .data,
+.wrapper .right .projects_data .data{
+  width: 45%;
 }
-#sidebar .side-menu li {
-	height: 48px;
-	background: transparent;
-	margin-left: 6px;
-	border-radius: 48px 0 0 48px;
-	padding: 4px;
+
+.wrapper .right .info_data .data h4,
+.wrapper .right .projects_data .data h4{
+    color: #050505;
+    margin-bottom: 5px;
 }
-#sidebar .side-menu li.active {
-	background: var(--grey);
-	position: relative;
+
+.wrapper .right .info_data .data p,
+.wrapper .right .projects_data .data p{
+  font-size: 13px;
+  margin-bottom: 10px;
+  color: #000000;
 }
-#sidebar .side-menu li.active::before {
-	content: '';
-	position: absolute;
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
-	top: -40px;
-	right: 0;
-	box-shadow: 20px 20px 0 var(--grey);
-	z-index: -1;
+
+.wrapper .social_media ul{
+  display: flex;
 }
-#sidebar .side-menu li.active::after {
-	content: '';
-	position: absolute;
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
-	bottom: -40px;
-	right: 0;
-	box-shadow: 20px -20px 0 var(--grey);
-	z-index: -1;
+
+.wrapper .social_media ul li{
+  width: 45px;
+  height: 45px;
+  background: linear-gradient(to right,#01a9ac,#01dbdf);
+  margin-right: 10px;
+  border-radius: 5px;
+  text-align: center;
+  line-height: 45px;
 }
-#sidebar .side-menu li a {
-	width: 100%;
-	height: 100%;
-	background: var(--light);
-	display: flex;
-	align-items: center;
-	border-radius: 48px;
-	font-size: 16px;
-	color: var(--dark);
-	white-space: nowrap;
-	overflow-x: hidden;
+
+.wrapper .social_media ul li a{
+  color :#fff;
+  display: block;
+  font-size: 18px;
 }
-#sidebar .side-menu.top li.active a {
-	color: var(--blue);
+hr {
+  display: block;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  margin-left: auto;
+  margin-right: auto;
+  border-style: inset;
+  border-width: 1px;
 }
-#sidebar.hide .side-menu li a {
-	width: calc(48px - (4px * 2));
-	transition: width .3s ease;
+.users{
+	color:black;
+	background-color: #A683E3;
+	border-radius: 15px;
 }
-#sidebar .side-menu li a.logout {
-	color: var(--red);
-}
-#sidebar .side-menu.top li a:hover {
-	color: var(--blue);
-}
-#sidebar .side-menu li a .bx {
-	min-width: calc(60px  - ((4px + 6px) * 2));
-	display: flex;
-	justify-content: center;
-}
-.subsubtitle{
-    background-color:powderblue;
+
+.logo{
+	width: 100px;
+	height:100px;
+	background-color: #000000;
+	border-radius: 10px;
 }
 </style>
+																		<script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+																	
+	<hr><a href="/admindashboard" class="brand"><center><img src="https://raw.githubusercontent.com/FMC-Weekend/fmcw-frontend/main/src/components/fmcfooter.png" class="logo"></center></a>
 
-<section id="sidebar">
- 
-    <a href="/admindashboard" class="brand">
-   	  <i class="fa-solid fa-clapperboard"></i>
-         <span class="text"> FMC WEEKEND </h1></span>
-        <span class="text1">  <i class="fa-solid fa-user"></i></span>
-    </a>
-
-<table>
-    <tr><div class="titlediv">
-        <th class="title"><i class="fa-solid fa-user"></i>Name</th>
-        <th class="title" ><i class="fa-solid fa-envelope"></i>Email</th>
-        <th class="title"><i class="fa-solid fa-graduation-cap"></i>College</th>
-        <th class="title"><i class="fa-solid fa-phone"></i></i>Phone Number</th>
-        <th class="title"><i class="fa-brands fa-instagram"></i>InstaHandle</th>
-        <th class="title">Year Of Study</th>
-       </div>
-        
-    </tr>
-
-<%  Details.forEach((data) => { %>
-     <tr>                           
-                               <th class="name"><i class="fa-solid fa-user"></i>  <br><%=data.name%></th>  
-                               <th class="email"> <i class="fa-solid fa-envelope"></i><br> <%=data.email%></th>  
-                               <th class="college"><i class="fa-solid fa-graduation-cap"><br></i>  <%=data.college%></th>  
-                               <th class="number"><i class="fa-solid fa-phone"></i><br>  <%=data.number%></th>  
-                               <th class="insta"></i><i class="fa-brands fa-instagram"></i><br>  <%=data.instaHandle%></th>  
-                               <th class="year"> <i class="fa-solid fa-calendar-days"></i><br> <%=data.yearOfStudy%></th>   
-                               <tr> 
-                                <tr> <td><tr><th class="subtitle"><i class="fa-brands fa-cuttlefish"></i>Title</th><th class="subtitle">Price</th><th class="subtitle">PaymentStatus</th><th class="subtitle">Category</th><th class="subtitle"><i class="fa-solid fa-money-bill-wheat"></i>Prize Money</th>
-                                </td> </tr>   <td>
-                                <%  data.cartItems.forEach((datas) => { %>
-                                    <tr><th class="subsubtitle"><%=datas.title%></th>
-                                        <th class="subsubtitle"><i class="fa-solid fa-indian-rupee-sign"></i> <%=datas.price%></th>
-                                    <th class="subsubtitle"><%=datas.verifyStatus%></th>
-                                    <th class="subsubtitle"><%=datas.genre%></th>
-                                    <th class="subsubtitle"><i class="fa-solid fa-trophy"></i><%=datas.prize%></th>
-                                <th class="subsubtitle"></th></tr>
-                                    <% }); %>
-                               </td>
-                            </tr> 
-                                                                               
-                                                                        </tr>          <% }); %></table>
+																		<%  Details.forEach((data) => { %>	
+																			<hr>
+																		<div class="wrapper">
+																			<div class="left">
+																				<br><br>
+																				<img src="https://media.wired.com/photos/5b17381815b2c744cb650b5f/master/w_2000,c_limit/GettyImages-134367495.jpg" alt="user" width="100">
+																		<br><br>		<h3><%=data.name%></h3>
+																				
+																			
+																				
+																			</div>
+																			<div class="right">
+																				<div class="info">
+																					<h3>Information</h3>
+																					<div class="info_data">
+																						 
+																						
+																					  <div class="data">
+																						<h4>College</h4>
+																						 <p><%=data.college%></p>
+																				   </div>
+																				   <div class="data">
+																					<h4>Insta Handle</h4>
+																					 <p><%=data.instaHandle%></p>
+																			   </div>
+																				   <div class="data">
+																					<h4>Current Year</h4>
+																					 <p><%=data.yearOfStudy%></p>
+																			   </div>
+																				   <div class="data">
+																					<h4>Phone</h4>
+																					 <p><%=data.number%></p>
+																			   </div>
+																			   <div class="data">
+																				<h4>Email</h4>
+																				<p> <%=data.email%></p>
+																			 </div>
+																					</div>
+																				</div>
+																			  
+																			  <div class="projects">
+																					<h3>Orders</h3>
+																					
+																					<div class="projects_data">
+																						
+																						 <div class="data">
+																							<h4>Title</h4>
+																							<%  data.cartItems.forEach((datas) => { %>
+																							<p><%=datas.title%></p>
+																							<% }); %>
+																						 </div>
+																						 <div class="data">
+																							<h4>Price</h4>
+																							<%  data.cartItems.forEach((datas) => { %>
+																							 <p> <%=datas.price%></p>
+																							 <% }); %>
+																							 </div>
+																							 <div class="data">
+																								<h4>Payment Status</h4>
+																								<%  data.cartItems.forEach((datas) => { %>
+																								 <p>	<%=datas.verifyStatus%></p>
+																								 <% }); %>
+																					  </div>
+																					  <div class="data">
+																						<h4>Genre</h4>
+																						<%  data.cartItems.forEach((datas) => { %>
+																						 <p>	<%=datas.genre%></p>
+																						 <% }); %>
+																			  </div>
+																			  <div class="data">
+																				<h4>Prize</h4>
+																				<%  data.cartItems.forEach((datas) => { %>
+																				 <p>	<%=datas.prize%></p>
+																				 <% }); %>
+																	  </div>
+																	 
+																					</div>
+																				</div>
+																			  
+																				<div class="social_media">
+																				
+																			  </div>
+																			</div>
+																		</div>	<% }); %>
+																		
+																			
+																		

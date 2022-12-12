@@ -14,7 +14,6 @@ exports.alluser = async function(req, res){
         users
       }
     })
-
   }
   catch(error) {
     res.json({

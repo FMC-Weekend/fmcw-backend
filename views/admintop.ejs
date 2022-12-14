@@ -1,0 +1,40 @@
+
+<%- include('partials/header.ejs') %>
+<section id="content">
+
+    <nav>
+        <i class='bx bx-menu' ></i>
+
+        
+        <a href="#" class="profile">
+            <img src="https://media-exp1.licdn.com/dms/image/C4E0BAQGeH6r35Fk8Wg/company-logo_200_200/0/1640441517142?e=1678320000&v=beta&t=GF5yoiA-Mc-gY6zJAgELEj4eegMK3QQI4HO7uvGt980">
+        </a>
+        <main>
+            <ul class="box-info">
+                <li>
+                    <a href="/adminDashboarduser">     <i class='bx bxs-calendar-check' ></i></a>
+                    <span class="text">  
+                        <a href="/adminDashboarduser">   <h3><%=totalOrders%></h3>
+                        <p>Orders</p> </a>   
+                    </span>
+               
+                </li>
+                <li>
+                    <a href="/adminDashboard"> <i class='bx bxs-group' ></i></a>
+                    <span class="text">
+                        <a href="/adminDashboard"><h3><%=total%></h3>
+                        <p>Users</p></a>  
+                    </span>
+                </li>
+                <li>
+                    <a href="/adminDashboarduser">   <i class='bx bxs-dollar-circle' ></i></a>
+                    <span class="text">
+                        <a href="/adminDashboarduser">   <h3><i class="fa-solid fa-indian-rupee-sign"></i> <%=totalPayments%></h3>
+                        <p>Total Sales</p></a>
+                    </span>
+                </li>
+            </ul>
+        </main>
+        
+        
+    </nav>

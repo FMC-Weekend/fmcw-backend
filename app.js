@@ -106,7 +106,7 @@ app.set('view engine', 'ejs');
 //   next();
 // });
 //Admin DashBoard
-
+app.use(express.static("public"));
 const Details=[];
 var total;
 var totalOrders=0;
@@ -118,22 +118,18 @@ app.get("/admindashboard", function(req, res) {
       total:total,
       totalOrders:totalOrders,
       totalPayments:totalPayments
-      // users:Details.length,
-          // x: x
   });
 
 });
 app.get("/admindashboarduser", function(req, res) {
   res.render("users", {
       Details: Details,
-      // users:Details.length,
-          // x: x
+      total:total,
+      totalOrders:totalOrders,
+      totalPayments:totalPayments
   });
 
 });
-// app.get("/orders",function(req,res){
-//   res.render("orders")
-// })
 const options = {
   "method": "GET",
   "hostname": "fmcw-backend1.onrender.com",
@@ -154,31 +150,12 @@ const req = http.request(options, function (res) {
   res.on("end", function () {
     const body = Buffer.concat(chunks);
     const n=body.toString();
-    // console.log(n[10001]);
     const k=JSON.parse(n);
-    // console.log(k.data.length);
     total=k.data.length;
   
     for (let index = 0; index <k.data.length; index++) {
-      // console.log(k.data[index].userCart.cartItems.length);
-      // console.log(k.data[index].userCart)
-      var detail={  
-        // name:k.data[index].name,
-        // email:k.data[index].email,
-        // college:k.data[index].college,
-        // instaHandle:k.data[index].instaHandle,
-        // number:k.data[index].number,
-        // yearOfStudy:k.data[index].yearOfStudy,
-        // id:k.data[index]._id,
-      
-        
-        }
-        // if(k.data[index].userCart===null){
-        //   detail={
-        //     cartItems:[]
-        //   }
-        // }
-        if(k.data[index].userCart!=null){
+      var detail={};
+if(k.data[index].userCart!=null){
 
 detail={
   name:k.data[index].name,
@@ -192,28 +169,7 @@ detail={
 }
 totalOrders=totalOrders+k.data[index].userCart.cartItems.length;
 for(let j = 0; j <k.data[index].userCart.cartItems.length; j++){
-  //     // console.log(k.data[index].email);
-  //     // console.log(k.data[index].name);
-      totalPayments=totalPayments+k.data[index].userCart.cartItems[j].price
-  //     // console.log(k.data[index].userCart.cartItems[j].price)
-  //     // console.log(k.data[index].userCart.cartItems[j].title)
-  //     // const loopdetail={
-  //     //   price:k.data[index].userCart.cartItems[j].price,
-  //     //   title:k.data[index].userCart.cartItems[j].title,
-  //     //   verifyStatus:k.data[index].userCart.cartItems[j].verifyStatus,
-
-  //     // }
-  //     // Details[index].cartItems.push(loopdetail);
-
-  //     // Details[index].push(loopdetail);
-  //     // console.log(Details[index].cartItems)
-  //     // console.log(totalPayments)
-     
-  //     // for(let j = 0; j <k.data.length; j++){
-        
-  //     // }
-  //     // console.log(k.data[0].userCart.cartItems[0]);
-     
+      totalPayments=totalPayments+k.data[index].userCart.cartItems[j].price     
   }
         }
         else{
@@ -228,36 +184,8 @@ for(let j = 0; j <k.data[index].userCart.cartItems.length; j++){
             cartItems:[]
           }
         }
-        // totalOrders=totalOrders+k.data[index].userCart.cartItems.length;
         Details.push(detail);
-        // console.log(Details)
-      // console.log(totalOrders);
-      
-    //   for(let j = 0; j <k.data[index].userCart.cartItems.length; j++){
-    //     // console.log(k.data[index].email);
-    //     // console.log(k.data[index].name);
-    //     totalPayments=totalPayments+k.data[index].userCart.cartItems[j].price
-    //     // console.log(k.data[index].userCart.cartItems[j].price)
-    //     // console.log(k.data[index].userCart.cartItems[j].title)
-    //     // const loopdetail={
-    //     //   price:k.data[index].userCart.cartItems[j].price,
-    //     //   title:k.data[index].userCart.cartItems[j].title,
-    //     //   verifyStatus:k.data[index].userCart.cartItems[j].verifyStatus,
 
-    //     // }
-    //     // Details[index].cartItems.push(loopdetail);
-
-    //     // Details[index].push(loopdetail);
-    //     // console.log(Details[index].cartItems)
-    //     // console.log(totalPayments)
-       
-    //     // for(let j = 0; j <k.data.length; j++){
-          
-    //     // }
-    //     // console.log(k.data[0].userCart.cartItems[0]);
-       
-    // }
-    // console.log(k.data[0].userCart.cartItems[0].title);
     
       }
   });

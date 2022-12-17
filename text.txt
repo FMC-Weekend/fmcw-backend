@@ -969,3 +969,62 @@ req.end();
 			</li>
 		</ul>
 	</section>
+
+	// app.js file
+	const express=require('express');
+	const bodyParser=require('body-parser');
+	const env=require('dotenv').config();
+	const app=express();
+	//set up the view engine
+	app.set('view engine', 'ejs');
+	app.use(bodyParser.urlencoded({extended: true}));
+	app.use(express.static('public'));
+	//middlewares
+	app.use(express.json());
+	require('./config/db');
+	//mkdir public views models routes config controllers middlewares services utils
+	//touch app.js .env .gitignore config/db.js config/mongoose.js config/passport-jwt-strategy.js config/passport-local-strategy.js controllers/home_controller.js controllers/users_controller.js models/user.js routes/index.js routes/users.js services/passport.js utils/mailer.js
+	//touch views/header.ejs views/footer.ejs views/login.ejs views/registration.ejs views/profile.ejs views/home.ejs views/reset_password.ejs views/update_password.ejs views/update_profile.ejs views/verify_email.ejs
+	//npm i express ejs body-parser dotenv mongoose colour bcryptjs
+	//nodemon app.js
+	const port=process.env.PORT || 3000;
+	//PORT=8080
+	//local_mongo='mongodb://127.0.0.1/Name'
+	//remote_mongo='mongodb+srv://shubham:shubhamm@cluster0.vnpa4vd.mongodb.net/?retryWrites=true&w=majority'
+	app.listen(port,()=>{
+	console.log(`Server is running on port `+port);
+	});
+	//MongoDB connection config.js / db.js
+	const mongoose = require('mongoose');
+	mongoose.set('strictQuery', true);
+	mongoose
+	.connect(process.env.local_mongo,{
+	 useNewUrlParser: true,
+	// useUnifiedToplogy:true,
+	// useCreateIndex:true
+	})
+	.then(() => {
+	console.log('connected to db');
+	 })
+	.catch((err) => {
+	console.log(err.message);
+	 });
+	//UserModel Schema
+	const mongoose=require('mongoose');
+	const userSchema=new mongoose.Schema({
+	name:{
+	 type:String,
+	 required:[true,'name is required'],
+	 },
+	email:{
+	 type:String,
+	 required:[true,'email is required'],
+	 unique:true
+	},
+	password:{
+	 type:String,
+	required:[true, 'password is required']
+	},
+	});
+	const userModel=mongoose.model('user',userSchema);
+	module.exports=userModel;

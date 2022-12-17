@@ -105,24 +105,52 @@ app.set('view engine', 'ejs');
 //   // Pass to next layer of middleware
 //   next();
 // });
+//creating json webtoken
+// const jwt = require('jsonwebtoken');
+//  const createToken =async()=>{
+//   const token=await jwt.sign({id:'639e25a949fca30bd2d1deda'},process.env.JWT_SECRET,{
+//     expiresIn:process.env.JWT_EXPIRES_IN
+//   });
+//   console.log(token);
+//   const decoded=await jwt.verify(token,process.env.JWT_SECRET);
+//   console.log(decoded);
+//  }
+
+
+//creating new admin in our database
+const adminUserModel=require('./models/admin_user');
+app.get('/register',(req,res)=>{
+  res.render('admins');
+})
 //Admin DashBoard
+const bodyParser=require('body-parser'); //used for requesting data from the form
+app.use(bodyParser.urlencoded({extended: true}));
+
 app.use(express.static("public"));
+app.get('/', (req, res) => {
+  res.render('login');
+  // console.log(req.body.username);
+  // console.log(req.body.password);
+});
 const Details=[];
 var total;
 var totalOrders=0;
 var totalPayments=0;
 const http = require("https");
-app.get("/admindashboard", function(req, res) {
-  res.render("adminDashboard", {
-      Details: Details,
-      total:total,
-      totalOrders:totalOrders,
-      totalPayments:totalPayments
-  });
+// app.get("/admindashboard", function(req, res) {
+//   res.render("adminDashboard", {
+//       Details: Details,
+//       total:total,
+//       totalOrders:totalOrders,
+//       totalPayments:totalPayments
+//   });
 
-});
-app.get("/admindashboarduser", function(req, res) {
+// });
+user=Math.floor(Math.random() * 1000000000);
+console.log(user);
+app.get(`/${user}`, function(req, res) {
   res.render("users", {
+      id:user,
       Details: Details,
       total:total,
       totalOrders:totalOrders,
@@ -192,6 +220,60 @@ for(let j = 0; j <k.data[index].userCart.cartItems.length; j++){
 });
 
 req.end();
+app.post('/',async (req, res) => {
+  // res.render('login');
+try{
+const username=req.body.username;
+const password=req.body.password;
+const userdetail=await adminUserModel.findOne({username:username});
+if(userdetail.password===password){
+  res.render("adminDashboard", {
+    id:user,
+    Details: Details,
+    total:total,
+    totalOrders:totalOrders,
+    totalPayments:totalPayments
+});   
+res.send(userdetail);
+console.log(userdetail);
+}
+else{
+  res.render("error");
+}}catch(err){
+  console.log(err);
+  res.render("error");
+}
+  // if(req.body.username===process.env.ADMIN_USERID && req.body.password===process.env.ADMIN_PASSWORD){
+
+  //   res.render("adminDashboard", {
+  //     Details: Details,
+  //     total:total,
+  //     totalOrders:totalOrders,
+  //     totalPayments:totalPayments
+  // });
+  // }
+  // else{
+  //   res.render("error");
+  // }
+  // console.log(req.body.username);
+  // console.log(req.body.password);
+});
+// app.post('/register',async (req,res)=>{
+//   try{
+//   console.log(req.body);
+//   const adminUser=new adminUserModel({
+//     username:req.body.username,
+//     password:req.body.password,
+//     name:req.body.name,
+//   });
+//   await adminUser.save();
+//   res.render('login');
+//   }catch(error){
+//   console.log(error);
+//   }
+//   })
+
+
 //ROUTERS
 const rout = require('./routers/index.router.js');
 const eventrout = require('./routers/event.router.js');

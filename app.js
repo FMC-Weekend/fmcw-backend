@@ -107,12 +107,92 @@ app.set('view engine', 'ejs');
 // });
 //Admin DashBoard
 app.use(express.static("public"));
+const bodyParser=require('body-parser');
+const cookieParser=require('cookie-parser');
+const admin_auth=require('./middleware/admin_auth');
+app.use(cookieParser());
+app.get('/',(req,res)=>{
+res.render('admin_login');
+}
+);
+// app.get('/register',(req,res)=>{
+// res.render('admin_register');
+// });
+const userModel=require('./models/admin_user');
+//bcrypt
+const bcrypt=require('bcryptjs');
+
+const saltRounds=10;
+// app.post('/register',async (req,res)=>{
+//   try{
+
+//       var {username ,password,name}=req.body;
+//       var salt = bcrypt.genSaltSync(saltRounds);
+// var hash = bcrypt.hashSync(password, salt);
+// password=hash;
+//       const user=new userModel({
+//           username:username,
+//           password:password,
+//           name:name
+//       });
+//       const token=await user.generateAuthToken(); //model me jakar generateAuthToken function ko call kia
+//       //cookie me token ko save kia
+//       res.cookie("jwt",token,{
+//           expires:new Date(Date.now()+300000),
+//           httpOnly:true,
+//           // secure:true
+//       });
+//       // console.log(user);
+//       await user.save();
+//       res.status(201).render('login');
+//   }catch(error)
+//   {
+//       res.status(400).render('error');
+//       console.log(error);
+//   }
+// });
+app.post('/',async (req,res)=>{
+  try{
+      const {username ,password}=req.body;
+      const users=await userModel.findOne({
+          username:username,
+          // password:password       
+      });
+      // console.log(users)
+      const token=await users.generateAuthToken(); //model me jakar generateAuthToken function ko call kia
+      // console.log(token);
+      res.cookie("jwt",token,{
+          expires:new Date(Date.now()+3000000),
+          httpOnly:true,
+          // secure:true
+      });
+      // console.log(req.cookies.jwt);
+      if(users.username===username && bcrypt.compareSync(password, users.password)){
+          // res.send('login successfull');
+          res.render("adminDashboard", {
+            Details: Details,
+            total:total,
+            totalOrders:totalOrders,
+            totalPayments:totalPayments
+        });
+      }
+      else{
+          res.render('error');
+      }
+
+  }catch(error)
+  {
+    res.render('error');
+      // res.status(400).render('error');
+      // console.log(error);
+  }
+});
 const Details=[];
 var total;
 var totalOrders=0;
 var totalPayments=0;
 const http = require("https");
-app.get("/admindashboard", function(req, res) {
+app.get("/admindashboard", admin_auth,function(req, res) {
   res.render("adminDashboard", {
       Details: Details,
       total:total,
@@ -121,7 +201,7 @@ app.get("/admindashboard", function(req, res) {
   });
 
 });
-app.get("/admindashboarduser", function(req, res) {
+app.get("/admindashboarduser",admin_auth, function(req, res) {
   res.render("users", {
       Details: Details,
       total:total,
@@ -228,6 +308,8 @@ app.all('*', (req, res) => {
 })
 // const decrypted = CryptoJS.AES.decrypt(encrypted, "Message").toString(CryptoJS.enc.Utf8);
 // DATABASE CONNECTION
+// const DB = process.env.local_mongo;
+
 const DB = process.env.DATABASE;
 mongoose.connect(DB, {
   useNewUrlParser: true, 

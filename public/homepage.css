@@ -619,3 +619,27 @@
       background-color: #000000;
       border-radius: 10px;
   }
+  .jumbotron{
+        position: absolute;
+        color: #AAAAAA;
+        top:10%;
+        left: 25%;
+        background-color: #0b0a0d;
+        border-radius: 50px;
+        width: 50%;
+        margin: auto;
+  }
+  .form-control{
+    border-radius: 50px;
+  }
+  .form-control:hover{
+    border-color: #FFCE26;
+    border-width: 2px;
+  }
+  .jumbotron button:hover{
+    background-color: #FFCE26;
+    color: #000000;
+    border-radius: 10px;
+  }
+
+  

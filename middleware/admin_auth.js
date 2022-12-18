@@ -13,4 +13,4 @@ const auth=async (req,res,next)=>{
         res.status(401).render("error");           
     }
 }
-module.exports=auth;
+module.exports=admin_auth;

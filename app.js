@@ -115,42 +115,42 @@ app.get('/',(req,res)=>{
 res.render('admin_login');
 }
 );
-// app.get('/register',(req,res)=>{
-// res.render('admin_register');
-// });
+ app.get('/register',(req,res)=>{
+ res.render('admin_register');
+ });
 const userModel=require('./models/admin_user');
 //bcrypt
 const bcrypt=require('bcryptjs');
 
 const saltRounds=10;
-// app.post('/register',async (req,res)=>{
-//   try{
+ app.post('/register',async (req,res)=>{
+  try{
 
-//       var {username ,password,name}=req.body;
-//       var salt = bcrypt.genSaltSync(saltRounds);
-// var hash = bcrypt.hashSync(password, salt);
-// password=hash;
-//       const user=new userModel({
-//           username:username,
-//           password:password,
-//           name:name
-//       });
-//       const token=await user.generateAuthToken(); //model me jakar generateAuthToken function ko call kia
-//       //cookie me token ko save kia
-//       res.cookie("jwt",token,{
-//           expires:new Date(Date.now()+300000),
-//           httpOnly:true,
-//           // secure:true
-//       });
-//       // console.log(user);
-//       await user.save();
-//       res.status(201).render('login');
-//   }catch(error)
-//   {
-//       res.status(400).render('error');
-//       console.log(error);
-//   }
-// });
+      var {username ,password,name}=req.body;
+       var salt = bcrypt.genSaltSync(saltRounds);
+    var hash = bcrypt.hashSync(password, salt);
+ password=hash;
+       const user=new userModel({
+         username:username,
+           password:password,
+          name:name
+      });
+       const token=await user.generateAuthToken(); //model me jakar generateAuthToken function ko call kia
+      //cookie me token ko save kia
+      res.cookie("jwt",token,{
+          expires:new Date(Date.now()+300000),
+          httpOnly:true,
+           secure:true
+      });
+      // console.log(user);
+      await user.save();
+      res.status(201).render('login');
+  }catch(error)
+  {
+      res.status(400).render('error');
+      console.log(error);
+  }
+});
 app.post('/',async (req,res)=>{
   try{
       const {username ,password}=req.body;

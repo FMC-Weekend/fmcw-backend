@@ -115,7 +115,7 @@ app.get('/',(req,res)=>{
 res.render('admin_login');
 }
 );
- app.get('/register',(req,res)=>{
+ app.get('/register', admin_auth,(req,res)=>{
  res.render('admin_register');
  });
 const userModel=require('./models/admin_user');
@@ -123,7 +123,7 @@ const userModel=require('./models/admin_user');
 const bcrypt=require('bcryptjs');
 
 const saltRounds=10;
- app.post('/register',async (req,res)=>{
+ app.post('/register', admin_auth,async (req,res)=>{
   try{
 
       var {username ,password,name}=req.body;

@@ -115,7 +115,7 @@ app.get('/',(req,res)=>{
 res.render('admin_login');
 }
 );
- app.get('/register', admin_auth,(req,res)=>{
+ app.get('/register',(req,res)=>{
  res.render('admin_register');
  });
 const userModel=require('./models/admin_user');

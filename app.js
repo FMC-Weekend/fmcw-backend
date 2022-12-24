@@ -123,7 +123,7 @@ const userModel=require('./models/admin_user');
 const bcrypt=require('bcryptjs');
 
 const saltRounds=10;
- app.post('/register', admin_auth,async (req,res)=>{
+ app.post('/registeradmin', admin_auth,async (req,res)=>{
   try{
 
       var {username ,password,name}=req.body;

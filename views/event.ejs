@@ -1,0 +1,21 @@
+<%- include('partials/header.ejs') %>
+
+<div class="container text-center">
+    <div class="jumbotron">
+        <h2>Event Page!</h2>
+        <% result.forEach(function(res){ %>
+            <div>
+                <ul>
+                    <li><%= res.details %></li>
+                    <li><%= res.link %></li>
+                    <li><%= res.price %></li>
+                    <li><%= res.club %></li>
+                </ul>
+                <a href="/event/participate/<%=res.id%>" class="btn btn-primary">Register</a>
+            </div>
+        <% })   %>
+
+    </div>
+</div>
+
+<%- include('partials/footer.ejs') %>

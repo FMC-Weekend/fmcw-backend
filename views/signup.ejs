@@ -1,0 +1,20 @@
+<%- include('partials/header.ejs') %>
+
+<div class="container text-center">
+    <div class="jumbotron">
+        <h2>Registration Page!</h2>
+        <form action="/signup" method="POST">
+            <div class="form-group">
+                <label for="username">UserName</label>
+                <input type="text" class="form-control" id="username" name="username">
+              </div>        
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password">
+              </div>
+            <button class="btn btn-primary">SignUp</button>
+          </form>
+    </div>
+</div>
+
+<%- include('partials/footer.ejs') %>

@@ -68,7 +68,7 @@ app.use(express.urlencoded({
 }));
 app.use(methodOverride('_method'));
 app.use(express.static('.'));
-app.set('view engine', 'ejs');
+
 
 // CORS
 // app.use(function (req, res, next) {
@@ -106,198 +106,7 @@ app.set('view engine', 'ejs');
 //   // Pass to next layer of middleware
 //   next();
 // });
-//Admin DashBoard
-app.use(express.static("public"));
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const admin_auth = require('./middleware/admin_auth');
-app.use(cookieParser());
-app.get('/', (req, res) => {
-  res.render('admin_login');
-}
-);
-app.get('/register', (req, res) => {
-  res.render('admin_register');
-});
-const userModel = require('./models/admin_user');
-//bcrypt
-const bcrypt = require('bcryptjs');
 
-const saltRounds = 10;
-app.post('/register', async (req, res) => {
-  try {
-
-    var { username, password, name } = req.body;
-    var salt = bcrypt.genSaltSync(saltRounds);
-    var hash = bcrypt.hashSync(password, salt);
-    password = hash;
-    const user = new userModel({
-      username: username,
-      password: password,
-      name: name
-    });
-    const token = await user.generateAuthToken(); //model me jakar generateAuthToken function ko call kia
-    //cookie me token ko save kia
-    res.cookie("jwt", token, {
-      expires: new Date(Date.now() + 300000),
-      httpOnly: true,
-      // secure:true
-    });
-    // console.log(user);
-    await user.save();
-    res.status(201).render('login');
-  } catch (error) {
-    res.status(400).render('error');
-    console.log(error);
-  }
-});
-app.post('/', async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const users = await userModel.findOne({
-      username: username,
-      // password:password       
-    });
-    // console.log(users)
-    const token = await users.generateAuthToken(); //model me jakar generateAuthToken function ko call kia
-    // console.log(token);
-    res.cookie("jwt", token, {
-      expires: new Date(Date.now() + 3000000),
-      httpOnly: true,
-      // secure:true
-    });
-    // console.log(req.cookies.jwt);
-    if (users.username === username && bcrypt.compareSync(password, users.password)) {
-      // res.send('login successfull');
-      res.render("adminDashboard", {
-        Details: Details,
-        total: total,
-        totalOrders: totalOrders,
-        totalPayments: totalPayments
-      });
-    }
-    else {
-      res.render('error');
-    }
-
-  } catch (error) {
-    res.render('error');
-    // res.status(400).render('error');
-    // console.log(error);
-  }
-});
-const Details = [];
-var total;
-var totalOrders = 0;
-var totalPayments = 0;
-const http = require("https");
-app.get("/admindashboard", admin_auth, function (req, res) {
-  res.render("adminDashboard", {
-    Details: Details,
-    total: total,
-    totalOrders: totalOrders,
-    totalPayments: totalPayments
-  });
-
-});
-app.get("/admindashboarduser", admin_auth, function (req, res) {
-  res.render("users", {
-    Details: Details,
-    total: total,
-    totalOrders: totalOrders,
-    totalPayments: totalPayments
-  });
-
-});
-const options = {
-  "method": "GET",
-  "hostname": "fmcw-backend1.onrender.com",
-  "port": null,
-  "path": "/api/alluser",
-  "headers": {
-    "Accept": "*/*",
-  }
-};
-app.get('/admindashboardUser', function (req, res) {
-
-})
-// const req = http.request(options, function (res) {
-//   const chunks = [];
-
-//   res.on("data", function (chunk) {
-//     chunks.push(chunk);
-//   });
-
-//   res.on("end", function () {
-//     const body = Buffer.concat(chunks);
-//     const n = body.toString();
-//     const k = JSON.parse(n);
-
-//     for (let index = 0; index < k.data.length; index++) {
-//       var detail = {};
-      
-//       if (k.data[index].userCart != null) {
-
-//         detail = {
-//           name: k.data[index].name,
-//           email: k.data[index].email,
-//           college: k.data[index].college,
-//           instaHandle: k.data[index].instaHandle,
-//           number: k.data[index].number,
-//           yearOfStudy: k.data[index].yearOfStudy,
-//           transactionID: k.data[index].transactionID,
-//           id: k.data[index]._id,
-//           cartItems: k.data[index].userCart.cartItems,
-//         }
-
-        
-//         Details.push(detail);
-
-//       //   for (let j = 0; j < k.data[index].userCart.cartItems.length; j++) {
-//       //   if(k.data[index].userCart.cartItems[j].verifyStatus===true) {
-//       //     total = Details.length;
-//       //     totalOrders = totalOrders + k.data[index].userCart.cartItems.length;
-//       //   }
-//       // }
-
-//       }
-//       else {
-//         detail = {
-//           name: k.data[index].name,
-//           email: k.data[index].email,
-//           college: k.data[index].college,
-//           instaHandle: k.data[index].instaHandle,
-//           number: k.data[index].number,
-//           yearOfStudy: k.data[index].yearOfStudy,
-//           transactionID: k.data[index].transactionID,
-//           id: k.data[index]._id,
-//           cartItems: []
-//         }
-//       }
-
-//       for (let j = 0; j < k.data[index].userCart.cartItems.length; j++) {
-//         if(k.data[index].userCart.cartItems[j].verifyStatus===true) {
-//           Details.push(detail);
-//           total = Details.length;
-//           totalOrders = totalOrders + k.data[index].userCart.cartItems.length;
-//           totalPayments = totalPayments + k.data[index].userCart.cartItems[j].price
-//         }
-//       }
-      
-//       var re1 = /@itbhu.ac.in\s*$/;
-//       var re2 = /@iitbhu.ac.in\s*$/;
-//       const x = re1.test(k.data[index].email) || re2.test(k.data[index].email)
-//       if (re1.test(k.data[index].email) || re2.test(k.data[index].email)) {
-//         Details.pop(detail);
-//         total = Details.length
-//     }
-
-      
-//     }
-//   });
-// });
-
-// req.end();
 //ROUTERS
 const rout = require('./routers/index.router.js');
 const eventrout = require('./routers/event.router.js');
@@ -309,7 +118,6 @@ const paymentrout = require('./services/instamojoPayment');
 // const parout = require('./routers/pa.router');
 
 const mailrout = require('./routers/mail.router');
-const visitor = require('./routers/visitors');
 
 
 
@@ -330,7 +138,6 @@ app.use('/api', paymentrout);
 app.use('/api', mailrout);
 // app.use('/api', parout);
 
-app.use('/api', visitor)
 app.all('*', (req, res) => {
   res.status(404).json({
     message: 'Given route does not exist'

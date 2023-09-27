@@ -262,9 +262,11 @@ exports.updateUserDetails = async (req, res) => {
 
 exports.getUserDetails = async (req, res) => {
 	try {
-		const token = req.get('token');
+		const email = req.get('email');
 
-		const email = await getGoogleUserInfo(token);
+		// const email = await getGoogleUserInfo(token);
+        // const email="resoshubham2002@gmail.com";
+		// console.log("Email is ",email,"Token is ",token);
 	
 		if(!email){
 			return res.json({

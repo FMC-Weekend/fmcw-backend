@@ -1,371 +1,160 @@
 const nodemailer = require("nodemailer");
-exports.contactUs = (req, res) => {
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: process.env.EMAIL1,
-            pass: process.env.PASS1,
-        }
+const { WebClient } = require('@slack/web-api');
+
+exports.contactUs =async (req, res) => {
+
+	const { name, email, message } = req.body;
+	// const name="Shubham"
+	// const email="shubham.kumar.min21@itbhu.ac.in";
+	// const message="Hello World";
+	const token = process.env.SLACK_TOKEN;
+	const web=new WebClient(token);
+	const slack=web.chat;
+	const mess=`Name: ${name}\nEmail: ${email}\nMessage: ${message}`
+	const response = await slack.postMessage({
+        channel: '#contact-us',
+        text: mess,
+        username: 'FMC WEEKEND',
+        icon_emoji: ':robot_face:',
     });
-    const mailOptions = {
-        from: "FMC WEEKEND",
-        to: `shubham.kumar.min21@itbhu.ac.in`,
-        subject: "FMC WEEKEND",
-        html: `
+    console.log('Message sent: ', response.ts);
+		
+	const transporter = nodemailer.createTransport({
+		service: 'gmail',
+		auth: {
+			user: process.env.EMAIL1,
+			pass: process.env.PASS1,
+		}
+	});
+	const mailOptions = {
+		from: "FMC WEEKEND",
+		to: `${email}`,
+		subject: "FMC WEEKEND",
+		html: `
         <!DOCTYPE html>
-<html lang="pl">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-		<title>Email</title>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dmc weekend - India's Premier Digital Art Fest</title>
+    <style>
+      
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
 
-		<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
 
-		<style>
-			.proton-body {
-				display: block;
-				padding: 0px;
-				margin: 0px;
-			}
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-			.proton-wrapper {
-				width: 100%;
-				display: block;
-				overflow: hidden;
-				box-sizing: border-box;
-				color: #222;
-				background: #f2f2fd;
-				font-size: 18px;
-				font-weight: normal;
-				font-family: 'Baloo 2', 'Open Sans', 'Roboto', 'Segoe UI', 'Helvetica Neue', Helvetica, Tahoma, Arial, monospace, sans-serif;
-			}
+        .header h1 {
+            font-size: 28px;
+            color: #6d49fc;
+        }
 
-			.proton-table {
-				border-collapse: collapse;
-				border-spacing: 0;
-				border: 0px;
-				width: 640px;
-				max-width: 90%;
-				margin: 100px auto;
-				box-shadow: 0px 20px 48px rgba(0, 0, 0, 0.2);
-				border-radius: 10px;
-				overflow: hidden;
-			}
+        .header p {
+            font-size: 18px;
+            color: #444;
+        }
 
-			.proton-table tr {
-				background: #ffffff;
-			}
+        .fest-details {
+            margin-top: 20px;
+            text-align: center;
+        }
 
-			.proton-table td,
-			.proton-table th {
-				border: 0px;
-				border-spacing: 0;
-				border-collapse: collapse;
-			}
+        .fest-details h2 {
+            font-size: 24px;
+            color: #6d49fc;
+        }
 
-			.proton-table tr td {
-				padding: 0px 40px;
-				box-sizing: border-box;
-			}
+        .fest-details p {
+            font-size: 18px;
+            color: #444;
+        }
 
-			.proton-margin {
-				float: left;
-				width: 100%;
-				overflow: hidden;
-				height: 40px;
-				padding-bottom: 0px;
-				box-sizing: border-box;
-			}
+        .fest-details a {
+            text-decoration: none;
+            color: #6d49fc;
+            font-weight: bold;
+        }
 
-			.proton-div {
-				float: left;
-				width: 100%;
-				overflow: hidden;
-				box-sizing: border-box;
-			}
+        .fest-details a:hover {
+            color: #55cc55;
+        }
 
-			.proton-table h1,
-			.proton-table h2,
-			.proton-table h3,
-			.proton-table h4 {
-				float: left;
-				width: 100%;
-				margin: 0px 0px 20px 0px !important;
-				padding: 0px;
-			}
+        .celebrities {
+            margin-top: 30px;
+            text-align: center;
+        }
 
-			.proton-table h1 {
-				font-size: 33px;
-			}
+        .celebrities h2 {
+            font-size: 24px;
+            color: #6d49fc;
+        }
 
-			.proton-table h2 {
-				font-size: 26px;
-			}
+        .celebrities p {
+            font-size: 18px;
+            color: #444;
+        }
 
-			.proton-table h3 {
-				font-size: 23px;
-			}
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+        }
 
-			.proton-table p {
-				float: left;
-				width: 100%;
-				font-size: 18px;
-				margin: 0px 0px 20px 0px !important;
-			}
+        .footer p {
+            font-size: 16px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Thanks ${name} for contacting FMC weekend!</h1>
+            <p>India's Premier Digital Art Fest</p>
+        </div>
+        <div class="fest-details">
+            <h2>Event Details</h2>
 
-			.proton-table h4 {
-				font-size: 20px;
-			}
-
-			.proton-table a {
-				color: #6d49fc;
-				font-weight: bold;
-			}
-
-			.proton-table a:hover {
-				color: #55cc55;
-			}
-
-			.proton-table a:active {
-				color: #ff6600;
-			}
-
-			.proton-table a:visited {
-				color: #ff00ff;
-			}
-
-			.proton-table a.proton-link {
-				display: inline-block;
-				width: auto !important;
-				outline: none !important;
-				text-decoration: none !important;
-			}
-
-			.proton-table img,
-			.proton-table a img {
-				display: block;
-				max-width: 100%;
-				margin-bottom: 20px;
-				border: 0px;
-				border-radius: 10px;
-				overflow: hidden;
-			}
-
-			.proton-table a.proton-button {
-				display: inline-block;
-				font-weight: bold;
-				font-size: 17px;
-				padding: 15px 40px;
-				margin: 20px 0px;
-				color: #ffffff !important;
-				background: #6d49fc !important;
-				border-radius: 10px;
-				text-decoration: none;
-				outline: none;
-			}
-
-			.proton-table a.proton-button:hover {
-				color: #ffffff !important;
-				background: #55cc55 !important;
-			}
-
-			.proton-code {
-				float: left;
-				width: 100%;
-				overflow: hidden;
-				box-sizing: border-box;
-				padding: 15px 40px;
-				margin: 20px 0px;
-				border: 1px dashed #6d49fcaa;
-				background: #6d49fc11;
-				color: #6d49fc;
-				font-weight: 700;
-				font-size: 23px;
-			}
-
-			.proton-flex {
-				float: left;
-				width: 100%;
-				text-align: center;
-			}
-
-			.proton-divider {
-				float: left;
-				width: 100%;
-				overflow: hidden;
-				margin: 20px 0px;
-				border-top: 2px solid #f2f2fd;
-			}
-		</style>
-
-		<style>
-			/* your style here */
-			.proton-flex img {
-				margin: 10px;
-				max-width: 15%;
-				width: 40px;
-			}
-		</style>
-	</head>
-
-	<body class="proton-body">
-		<div class="proton-wrapper">
-			<table class="proton-table">
-				<tbody>
-					<tr class="proton-tr">
-						<td class="proton-td" colspan="10" style="">
-							<div class="proton-margin"></div>
-							<center>
-								<h1>Welcome !</h1>
-								<img src="https://proton.me/images/social/proton-mail-og.png" alt="Image" />
-							</center>
-							<h2>Confirm email address</h2>
-							<p>
-								Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, architecto minus <a href="https://proton.me">go to site</a> . Placeat sapiente perspiciatis illum corporis earum obcaecati illo mollitia inventore voluptatibus, ipsa, quasi quaerat dolorem commodi labore accusantium
-								repudiandae!
-							</p>
-						</td>
-					</tr>
-
-					<tr class="proton-tr">
-						<td class="proton-td" colspan="10" style="">
-							<center>
-								<a href="http://localhost" class="proton-button" target="_blank">Confirm Email</a>
-							</center>
-						</td>
-					</tr>
-
-					<tr class="proton-tr">
-						<td class="proton-td" colspan="10" style="">
-							<h2>Secret code</h2>
-							<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, architecto minus accusantium repudiandae!</p>
-							<center>
-								<div class="proton-code">
-									<password>KLE-6677-HJS-7866</password>
-								</div>
-							</center>
-						</td>
-					</tr>
-
-					<tr class="proton-tr">
-						<td class="proton-td" colspan="10" style="">
-							<h2>About company</h2>
-							<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, architecto minus. Placeat sapiente perspiciatis illum corporis earum obcaecati illo mollitia inventore voluptatibus, ipsa, quasi quaerat dolorem commodi labore accusantium repudiandae!</p>
-						</td>
-					</tr>
-
-					<tr class="proton-tr">
-						<td class="proton-td" colspan="10" style="">
-							<h2>Current promotions</h2>
-						</td>
-					</tr>
-
-					<tr class="proton-tr">
-						<td class="proton-td" colspan="3" style="padding-right: 10px">
-							<img src="https://media.cybernews.com/images/featured/2020/09/protonmail-review-1.jpg" alt="Image" />
-							<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, architecto minus. Placeat sapiente perspiciatis illum corporis earum obcaecati illo mollitia inventore voluptatibus, ipsa, quasi quaerat dolorem commodi labore accusantium repudiandae!</p>
-						</td>
-						<td class="proton-td" colspan="3" style="padding-left: 10px">
-							<img src="https://media.cybernews.com/images/featured/2020/09/protonmail-review-1.jpg" alt="Image" />
-							<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, architecto minus. Placeat sapiente perspiciatis illum corporis earum obcaecati illo mollitia inventore voluptatibus, ipsa, quasi quaerat dolorem commodi labore accusantium repudiandae!</p>
-						</td>
-					</tr>
-
-					<tr class="proton-tr">
-						<td class="proton-td" colspan="10" style="">
-							<h2>Gallery</h2>
-						</td>
-					</tr>
-
-					<tr class="proton-tr">
-						<td class="proton-td" colspan="3" style="padding-right: 10px; width: 50%">
-							<a href="https://proton.me" class="proton-link">
-								<img src="https://media.cybernews.com/images/featured/2020/09/protonmail-review-1.jpg" alt="Image" />
-							</a>
-						</td>
-						<td class="proton-td" colspan="3" style="padding-left: 10px; width: 50%">
-							<a href="https://proton.me" class="proton-link">
-								<img src="https://media.cybernews.com/images/featured/2020/09/protonmail-review-1.jpg" alt="Image" />
-							</a>
-						</td>
-					</tr>
-
-					<tr class="proton-tr">
-						<td class="proton-td" colspan="10" style="">
-							<h2>Links</h2>
-						</td>
-					</tr>
-
-					<tr class="proton-tr">
-						<td class="proton-td" colspan="2" style="padding-right: 5px; width: 33%">
-							<a href="https://proton.me" class="proton-link">
-								<img src="https://media.cybernews.com/images/featured/2020/09/protonmail-review-1.jpg" alt="Image" />
-							</a>
-						</td>
-						<td class="proton-td" colspan="2" style="padding-left: 5px; padding-right: 5px; width: 28%">
-							<a href="https://proton.me" class="proton-link">
-								<img src="https://media.cybernews.com/images/featured/2020/09/protonmail-review-1.jpg" alt="Image" />
-							</a>
-						</td>
-						<td class="proton-td" colspan="2" style="padding-left: 5px; width: 33%">
-							<a href="https://proton.me" class="proton-link">
-								<img src="https://media.cybernews.com/images/featured/2020/09/protonmail-review-1.jpg" alt="Image" />
-							</a>
-						</td>
-					</tr>
-
-					<tr class="proton-tr">
-						<td class="proton-td" colspan="10" style="">
-							<br />
-							<h3>Regards</h3>
-							<p>
-								Alex, <br />
-								Have a nice day!
-							</p>
-						</td>
-					</tr>
-
-					<tr class="proton-tr">
-						<td class="proton-td" colspan="10" style="">
-							<div class="proton-divider"></div>
-							<center>
-								<span style="color: #706d6b"> © 2023 Proton Switzerland </span>
-							</center>
-							<div class="proton-flex">
-								<a href="https://proton.me" class="proton-link">
-									<img src="https://img.icons8.com/?size=64&id=LPcVDft9Isqt&format=png" alt="Image" />
-								</a>
-								<a href="https://proton.me" class="proton-link">
-									<img src="https://img.icons8.com/?size=64&id=LPcVDft9Isqt&format=png" alt="Image" />
-								</a>
-								<a href="https://proton.me" class="proton-link">
-									<img src="https://img.icons8.com/?size=64&id=LPcVDft9Isqt&format=png" alt="Image" />
-								</a>
-								<a href="https://proton.me" class="proton-link">
-									<img src="https://img.icons8.com/?size=64&id=LPcVDft9Isqt&format=png" alt="Image" />
-								</a>
-							</div>
-							<div class="proton-margin"></div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</body>
+            <p>Join us for an incredible celebration of digital art and creativity. Explore cutting-edge art, participate in workshops, and more. Visit our website for event details: <a href="https://www.fmcweekend.in/" target="_blank">FMC WEEKEND Website</a></p>
+        </div>
+        <div class="celebrities">
+            <h2>Special Guests</h2>
+            <p>We're thrilled to announce that many celebrities will be gracing our event. Stay tuned for updates on our star-studded lineup!</p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2023 FMC WEEKEND - Organized by IIT BHU</p>
+        </div>
+    </div>
+</body>
 </html>
+
         `
-    };
-    transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-            console.log(error);
-            res.send(error);
-        }
-        else {
-            // console.log("Email sent to:" +` ${name} `+info.response);
-            res.send("Email Sent.")
-        }
+	};
+	transporter.sendMail(mailOptions, function (error, info) {
+		if (error) {
+			console.log(error);
+			res.send(error);
+		}
+		else {
+			// console.log("Email sent to:" +` ${name} `+info.response);
+			res.send("Email Sent.")
+		}
 
 
-    })
+	})
 }

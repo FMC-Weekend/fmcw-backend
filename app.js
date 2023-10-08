@@ -159,8 +159,6 @@ mongoose.connect(DB, {
   console.log('There was some error connecting to the database');
   console.log(err);
 })
-
-
 // APP SETUP
 app.listen(process.env.PORT || 8000, function (err, result) {
   console.log(`Server is running at port! ${process.env.PORT}`);

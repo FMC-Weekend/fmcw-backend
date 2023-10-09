@@ -5,6 +5,7 @@ const usermodel = require('../models/User_m');
 const instimodel = require('../models/ins_m');
 const camodel = require('../models/ca_m');
 const { genrefcodeca, genrefcodepa } = require('../services/generaterefcode');
+const slackInteraction=require("./slack.controller.js")
 var exports = module.exports = {}
 
 exports.registerca = async function(req, res){

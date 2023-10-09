@@ -1,36 +1,22 @@
 const nodemailer = require("nodemailer");
-const { WebClient } = require('@slack/web-api');
-
-exports.contactUs =async (req, res) => {
-
-	const { name, email, message } = req.body;
-	// const name="Shubham"
-	// const email="shubham.kumar.min21@itbhu.ac.in";
-	// const message="Hello World";
-	const token = process.env.SLACK_TOKEN;
-	const web=new WebClient(token);
-	const slack=web.chat;
-	const mess=`Name: ${name}\nEmail: ${email}\nMessage: ${message}`
-	const response = await slack.postMessage({
-        channel: '#contact-us',
-        text: mess,
-        username: 'FMC WEEKEND',
-        icon_emoji: ':robot_face:',
+const slackInteraction = require("./slack.controller.js");
+exports.contactUs = async (req, res) => {
+    const { name, email, message } = req.body;
+    const messs = `New Contact Us Request\n
+    Name: ${name}\nEmail: ${email}\nMessage: ${message}`
+    slackInteraction.slackInteraction("#contact-us", messs);
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL1,
+            pass: process.env.PASS1,
+        }
     });
-    console.log('Message sent: ', response.ts);
-		
-	const transporter = nodemailer.createTransport({
-		service: 'gmail',
-		auth: {
-			user: process.env.EMAIL1,
-			pass: process.env.PASS1,
-		}
-	});
-	const mailOptions = {
-		from: "FMC WEEKEND",
-		to: `${email}`,
-		subject: "FMC WEEKEND",
-		html: `
+    const mailOptions = {
+        from: "FMC WEEKEND",
+        to: `${email}`,
+        subject: "FMC WEEKEND",
+        html: `
         <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -144,17 +130,17 @@ exports.contactUs =async (req, res) => {
 </html>
 
         `
-	};
-	transporter.sendMail(mailOptions, function (error, info) {
-		if (error) {
-			console.log(error);
-			res.send(error);
-		}
-		else {
-			// console.log("Email sent to:" +` ${name} `+info.response);
-			res.send("Email Sent.")
-		}
+    };
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+            res.send(error);
+        }
+        else {
+            // console.log("Email sent to:" +` ${name} `+info.response);
+            res.send("Email Sent.")
+        }
 
 
-	})
+    })
 }

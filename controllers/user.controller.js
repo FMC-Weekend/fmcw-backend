@@ -8,7 +8,7 @@ const caModel = require("../models/ca_m");
 const { request } = require("https");
 const { getGoogleUserInfo } = require('../middleware/goath');
 const mongoose = require("mongoose");
-
+const slackInteraction=require("./slack.controller.js");
 exports.getAllUsers = async (req, res) => {
 	try {
 		const data = await userModel.find({});
@@ -149,6 +149,7 @@ exports.getAllInsti = async (req, res) => {
 exports.updateUserDetails = async (req, res) => {
 	try {
 		let type = req.body.userType;
+		slackInteraction.slackInteraction("#signup", `User details update requested for ${req.body.email} in dashboard route with \n ${JSON.stringify(req.body)}`);
 		let completeSuccess = false;
 		const emailPostfix = req.body.email.substr(req.body.email.length - 11);
 		if(emailPostfix === "itbhu.ac.in") type = 0;
@@ -276,6 +277,7 @@ exports.getUserDetails = async (req, res) => {
 				message: "user not found, please sign in again",
 			});
 		}
+		slackInteraction.slackInteraction("#dashboard", `User details requested for ${email} in dashboard route`);
 		
 		let user = {};
 		await userModel.findOne({ email: email })

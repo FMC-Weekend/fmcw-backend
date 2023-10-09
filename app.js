@@ -14,7 +14,7 @@ const paymentDetails = require('./controllers/pa.controller')
 const cors = require('cors');
 
 app.use(cors());
-
+const slackInteraction = require("./controllers/slack.controller.js");
 // var cors = require("cors");
 // var session = require("express-session");
 // var nodemailer = require("nodemailer");
@@ -115,7 +115,7 @@ const leaderrout = require('./routers/leader.router.js');
 const userrout = require('./routers/user.router');
 const cartrout = require('./routers/cart.router');
 const paymentrout = require('./services/instamojoPayment');
-const contactrout=require("./routers/contact.router")
+const contactrout = require("./routers/contact.router")
 // const parout = require('./routers/pa.router');
 
 const mailrout = require('./routers/mail.router');
@@ -137,7 +137,7 @@ app.use('/api', userrout);
 app.use('/api', cartrout);
 app.use('/api', paymentrout);
 app.use('/api', mailrout);
-app.use('/api',contactrout)
+app.use('/api', contactrout)
 // app.use('/api', parout);
 
 app.all('*', (req, res) => {
@@ -154,12 +154,15 @@ mongoose.connect(DB, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => {
+  slackInteraction.slackInteraction("#server", `Successfully connected to database with ` + DB);
   console.log('Successfully connected to database');
 }).catch((err) => {
   console.log('There was some error connecting to the database');
   console.log(err);
 })
+
 // APP SETUP
 app.listen(process.env.PORT || 8000, function (err, result) {
   console.log(`Server is running at port! ${process.env.PORT}`);
+  slackInteraction.slackInteraction("#server", `Server is running at port! ${process.env.PORT}`);
 });

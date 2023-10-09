@@ -4,7 +4,7 @@ const CryptoJS = require('crypto-js');
 const userModel = require('../models/User_m');
 const instiModel = require('../models/ins_m');
 const CartModel = require("../models/cart_m");
-
+const slckInteraction = require("../controllers/slack.controller.js")
 var sess;
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(CLIENT_ID);
@@ -24,6 +24,7 @@ exports.loginFunc = (req, res) => {
         return res.json({message:'invalid token'})
       });
       const payload = ticket.getPayload();
+      slckInteraction.slackInteraction("#login-info", `New user logged in with email ` + payload.email);
       user.email = payload.email;
       user.name = payload.name;
       user.newUser = false;

@@ -4,11 +4,16 @@ const Schema = mongoose.Schema;
 const CartSchema = new Schema({
     forUser: String,
     cartItems: [{
-        id: String,
+        id: {
+            type: Number,
+            unique: true
+        },
         img: String,
         genre: String,
         Type: String,
         title: String,
+        special: String,
+
         link: String,
         price: Number,
         prize: String,

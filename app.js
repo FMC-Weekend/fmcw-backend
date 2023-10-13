@@ -124,7 +124,9 @@ const mailrout = require('./routers/mail.router');
 
 // ROUTES
 app.get('/api/test', (req, res) => {
-  res.json({ message: 'API Running successfully' });
+  slackInteraction.slackInteraction("#cron-job", `Server Pinged by ${req.ip}`);
+  // console.log(req)
+  res.status(200).json({ message: 'API Running successfully' });
 })
 app.post("/api/google-login", loginFunc);
 app.post("/api/verify-token", verifyToken);

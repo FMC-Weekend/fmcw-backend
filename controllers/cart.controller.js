@@ -80,3 +80,22 @@ exports.deleteElementFromCart = async (req, res) => {
         })
     }
 }
+exports.getCartItems=async(req,res)=>{
+    const {email}=req.body;
+    console.log(req.body)
+    // res.send(email)
+    try{
+        const user=await UserModel.findOne({email:email});
+        const cart=await CartModel.findOne({forUser:user._id});
+        res.json({
+            status:"Success",
+            cartItems:cart.cartItems
+        })
+    }
+    catch(err){
+        res.json({
+            status:"Failure",
+            error:err
+        })
+    }
+}

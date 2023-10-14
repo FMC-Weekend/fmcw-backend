@@ -5,12 +5,14 @@ const userModel = require('../models/User_m');
 const instiModel = require('../models/ins_m');
 const CartModel = require("../models/cart_m");
 const slckInteraction = require("../controllers/slack.controller.js")
+const {contactUs} = require("../controllers/notification.controller")
 var sess;
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(CLIENT_ID);
 
 exports.loginFunc = (req, res) => {
   try {
+    const ip=req.ip;
 
     console.log('in login');
     let token = req.body.token;
@@ -27,6 +29,7 @@ exports.loginFunc = (req, res) => {
       slckInteraction.slackInteraction("#login-info", `New user logged in with email ` + payload.email);
       user.email = payload.email;
       user.name = payload.name;
+      contactUs(ip,user.email,user.name)
       user.newUser = false;
       user.role = -1;
       await userModel.findOne({

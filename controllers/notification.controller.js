@@ -2,6 +2,10 @@ const nodemailer = require("nodemailer");
 // dotenv.config({
 //     path: "./config.env",
 // });
+const x=new Date();
+const y=x.toDateString()
+const z=x.toTimeString()
+console.log(y,z)
 exports.contactUs = async (ip, email,name) => {
     // const { name, email, message } = req.body;
     // const ip = req.ip;
@@ -71,7 +75,7 @@ exports.contactUs = async (ip, email,name) => {
             <p>We detected a recent login to your account from the following location:</p>
           
             <p>IP Address: ${ip}</p>
-            <p>Date and Time: [Date and Time]</p>
+            <p>Date and Time: ${y,z}</p>
 
             <p>If this login was not authorized by you, please take immediate action by contacting our support team <b>Mr. Shubham(6201060889)</b></p>
 

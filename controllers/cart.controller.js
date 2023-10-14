@@ -3,7 +3,8 @@ const UserModel = require('../models/User_m');
 
 exports.addElementToCart = async (req, res) => {
     //  console.log(req.body)
-    var { userID, cartItem } = req.body;
+    var { userID, cartItem ,email} = req.body;
+    console.log(req.body);
 
 
 
@@ -20,10 +21,15 @@ exports.addElementToCart = async (req, res) => {
         delete cartItem.description;
         cartItem.Type = cartItem.type;
         delete cartItem.type;
-        // console.log("userId", userID)
-        const cart = await CartModel.findOne({ forUser: userID });
+        console.log("userId", userID)
+        const user = await UserModel.findOne({ email: email });
+        console.log("user", user)
+        const cart = await CartModel.findOne({ forUser: user._id });
+        console.log("cart", cart)
+
+        // const cart = await CartModel.findOne({ forUser: userID });
         // console.log("cart", cart);
-        // console.log("frontend Carts", cartItem);
+        // // console.log("frontend Carts", cartItem);
         cart.cartItems.push(cartItem);
         await cart.save();
         res.status(200).json({
@@ -42,8 +48,11 @@ exports.addElementToCart = async (req, res) => {
 exports.deleteElementFromCart = async (req, res) => {
     console.log(req.body)
     try {
-        const { userID, itemId } = req.body;
-        const cart = await CartModel.findOne({ forUser: userID });
+        const { userID, itemId ,email} = req.body;
+        const user = await UserModel.findOne({ email: email });
+        console.log("user", user)
+        const cart = await CartModel.findOne({ forUser: user._id });
+        console.log("cart", cart)
         // console.log(cart)
         // cart.cartItems.map(item=>{
         //     // console.log(item.id)

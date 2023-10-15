@@ -99,3 +99,25 @@ exports.getCartItems=async(req,res)=>{
         })
     }
 }
+
+exports.clearCart= async (req,res)=>{
+    console.log(req.body)
+    try {
+        const {email} = req.body;
+        const user = await UserModel.findOne({ email: email });
+        console.log("user", user)
+        const cart = await CartModel.findOne({ forUser: user._id });
+        console.log("cart", cart)
+        cart.cartItems=[];
+        await cart.save();
+        res.json({
+            status:"Success"
+        })
+    }catch(arr){
+        res.json({
+            status:"Failure",
+            error:err
+        })
+    }
+
+}

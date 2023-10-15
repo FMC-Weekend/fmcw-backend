@@ -63,16 +63,7 @@ exports.loginFunc = (req, res) => {
       verify()
         .then(async () => {
           var emcheck = user.email.substr(user.email.length - 11);
-          if (user.role === 0) {
-            const encryptedHash = CryptoJS.AES.encrypt(user.email, process.env.CRYPTO_SECRET_MESSAGE).toString();
-            return res.json({
-              "message": "insti",
-              userType: 0,
-              encryptedHash,
-              user
-            })
-          }
-          else if (emcheck === "itbhu.ac.in") {
+          if (emcheck === "itbhu.ac.in") {
             var inst = {};
             inst.userID = user.userID;
             instiModel.create(inst).then((result) => {
@@ -93,6 +84,15 @@ exports.loginFunc = (req, res) => {
             }).catch((error) => {
               console.log(error);
             });
+          }
+          if (user.role === 0) {
+            const encryptedHash = CryptoJS.AES.encrypt(user.email, process.env.CRYPTO_SECRET_MESSAGE).toString();
+            return res.json({
+              "message": "insti",
+              userType: 0,
+              encryptedHash,
+              user
+            })
           }
           else if (user.role === 2) return res.json({
             "message": "ca",

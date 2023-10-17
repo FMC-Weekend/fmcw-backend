@@ -65,7 +65,7 @@ exports.deleteElementFromCart = async (req, res) => {
 
         // })
         let newCartItems = cart.cartItems.filter(item => {
-            return item.id != itemId
+            return item.id != itemId || item.payment.status==0 || item.payment.status==1;
         });
         cart.cartItems = newCartItems;
         await cart.save();
@@ -120,4 +120,72 @@ exports.clearCart= async (req,res)=>{
         })
     }
 
+}
+exports.updatePaymentStatus = async (req, res) => {
+    console.log(req.body)
+    try {
+        var status=0;
+        const { paymentID, paymentRequestID,email } = req.body;
+        const user = await UserModel.findOne({ email: email });
+        const cart = await CartModel.findOne({ forUser: user._id });
+        cart.cartItems.forEach(item => {
+            if(item.payment.status==-1){
+                status=0;
+                item.payment.status = status;
+                item.payment.paymentID = paymentID;
+                item.payment.paymentRequestID = paymentRequestID;
+            }
+           
+        })
+        await cart.save();
+        res.json({
+            status: 'success'
+        })
+    }
+    catch (err) {
+        res.json({
+            status: 'Failure',
+            error: err
+        })
+    }
+}
+exports.pendingPayment = async (req, res) => {
+    try {
+        const {email} = req.body;
+        const user = await UserModel.findOne({ email: email });
+        const cart = await CartModel.findOne({ forUser: user._id });
+        let pendingItems = cart.cartItems.filter(item => {
+            return item.payment.status == 0;
+        });
+        res.json({
+            status: 'success',
+            pendingItems: pendingItems
+        })
+    }
+    catch (err) {
+        res.json({
+            status: 'Failure',
+            error: err
+        })
+    }
+}
+exports.successPayment = async (req, res) => {
+    try {
+        const {email} = req.body;
+        const user = await UserModel.findOne({ email: email });
+        const cart = await CartModel.findOne({ forUser: user._id });
+        let successItems = cart.cartItems.filter(item => {
+            return item.payment.status == 1;
+        });
+        res.json({
+            status: 'success',
+            successItems: successItems
+        })
+    }
+    catch (err) {
+        res.json({
+            status: 'Failure',
+            error: err
+        })
+    }
 }

@@ -30,7 +30,7 @@ exports.loginFunc = (req, res) => {
       slckInteraction.slackInteraction("#login-info", `New user logged in with email ` + payload.email);
       user.email = payload.email;
       user.name = payload.name;
-      contactUs(ip,user.email,user.name)
+      // contactUs(ip,user.email,user.name)
       user.newUser = false;
       user.role = -1;
       await userModel.findOne({

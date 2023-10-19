@@ -82,3 +82,20 @@ exports.verifyUserPurchase=async(req,res)=>{
         })
     }
 }
+exports.unverifyUserPurchase=async(req,res)=>{
+    const {email}=req.body;
+    try{
+        const user = await UserModel.findOne({ email: email });
+        const registered_events = await RegisteredEventsModel.findOne({ forUser: user._id });
+        registered_events.verified=false;
+        await registered_events.save();
+        res.json({
+            status:"Success"
+        })
+    }catch(err){
+        res.json({
+            status:"Failed",
+            error:err
+        })
+    }
+}

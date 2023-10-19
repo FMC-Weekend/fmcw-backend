@@ -56,12 +56,29 @@ exports.getRegisteredEvents=async(req,res)=>{
         console.log(registered_events.registeredEvents)
         res.json({
             status:"Success",
-            registeredEvents:registered_events.registeredEvents
+            registeredEvents:registered_events.registeredEvents,
+            verified:registered_events.verified
         })
     }catch(err){
         res.json({
             status:"Failure",
             error:err
+        })
+    }
+}
+exports.verifyUserPurchase=async(req,res)=>{
+    const {email,secureKey}=req.body;
+    if(secureKey===process.env.SECURE_VERIFICATION_KEY){
+        const user = await UserModel.findOne({ email: email });
+        const registered_events = await RegisteredEventsModel.findOne({ forUser: user._id });
+        registered_events.verified=true;
+        await registered_events.save();
+        res.json({
+            status:"Success"
+        })
+    }else{
+        res.json({
+            status:"Failed"
         })
     }
 }

@@ -2,6 +2,7 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 const cartModel = require('./cart_m');
+const registeredEventsModel = require('./registered_events_m');
 
 var validateEmail = function (email) {
     var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -43,12 +44,16 @@ var UserSchema = new Schema({
 	userCart: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'cart'
+	},
+	userRegisteredEvents: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'registered_events'
 	}
 });
 
 UserSchema.pre(/^find/, async function(next) {
 	this.populate({
-		path: 'userCart'
+		path: 'userCart userRegisteredEvents'
 	})
 	next();
 })

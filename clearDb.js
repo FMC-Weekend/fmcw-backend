@@ -9,6 +9,7 @@ const userModel = require("./models/User_m");
 const instiModel = require("./models/ins_m");
 const caModel = require("./models/ca_m");
 const cartModel = require("./models/cart_m");
+const registeredEventsModel = require("./models/registered_events_m");
 
 const deleteAllUsers = async () => {
 	await userModel.remove(
@@ -44,6 +45,14 @@ const deleteAllCarts = async () => {
 		}
 	);
 };
+const deleteAllRegisteredEvents = async () => {
+	await registeredEventsModel.remove(
+		{},
+		{
+			justOne: false,
+		}
+	);
+};
 const deleteAllInsti = async () => {
 	await instiModel.remove(
 		{},
@@ -71,6 +80,7 @@ mongoose
 		deleteAllPa();
 		deleteAllInsti();
 		deleteAllCarts();
+		deleteAllRegisteredEvents();
 	})
 	.catch((err) => {
 		console.log("There was some error connecting to the database");

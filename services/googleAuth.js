@@ -3,8 +3,9 @@ const { OAuth2Client } = require("google-auth-library");
 const CryptoJS = require('crypto-js');
 const userModel = require('../models/User_m');
 const instiModel = require('../models/ins_m');
-const CartModel = require("../models/cart_m");
 const slckInteraction = require("../controllers/slack.controller.js")
+const CartModel = require("../models/cart_m");
+const registeredEventsModel = require("../models/registered_events_m");
 const {contactUs} = require("../controllers/notification.controller")
 var sess;
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
@@ -44,7 +45,12 @@ exports.loginFunc = (req, res) => {
                 forUser: newUser._id,
                 cartItems: []
               });
+              const newRegisteredEvents = await registeredEventsModel.create({
+                forUser: newUser._id,
+                registeredEvents: []
+              });
               newUser.userCart = newCart._id;
+              newUser.userRegisteredEvents = newRegisteredEvents._id;
               await newUser.save();
               console.log('Added new user');
             }).catch(function (error) {

@@ -116,6 +116,7 @@ const userrout = require('./routers/user.router');
 const cartrout = require('./routers/cart.router');
 const paymentrout = require('./services/instamojoPayment');
 const contactrout = require("./routers/contact.router")
+const registeredeventsrout = require("./routers/registeredEvents.router")
 // const parout = require('./routers/pa.router');
 
 const mailrout = require('./routers/mail.router');
@@ -140,6 +141,7 @@ app.use('/api', cartrout);
 app.use('/api', paymentrout);
 app.use('/api', mailrout);
 app.use('/api', contactrout)
+app.use('/api', registeredeventsrout)
 // app.use('/api', parout);
 
 app.all('*', (req, res) => {
@@ -152,6 +154,7 @@ app.all('*', (req, res) => {
 // const DB = process.env.local_mongo;
 
 const DB = process.env.DATABASE;
+console.log(DB)
 mongoose.connect(DB, {
   useNewUrlParser: true,
   useUnifiedTopology: true

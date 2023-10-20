@@ -99,3 +99,44 @@ exports.unverifyUserPurchase=async(req,res)=>{
         })
     }
 }
+exports.verifiedEvents=async(req,res)=>{
+    let verifiedEvents=[];
+    const {email} =req.body;
+    try{
+       const user=await UserModel.findOne({email:email});
+       const registered_events=await RegisteredEventsModel.findOne({forUser:user._id});
+         res.json({
+             status:"Success",
+             verifiedEvents:registered_events.ver
+         })
+       
+    }catch(err){
+        res.json({
+            status:"Failed",
+            error:err
+        })
+    }
+}
+exports.addVerifiedEvents = async (req, res) => {
+    const { email, toAppend, secure } = req.body;
+    if (secure !== process.env.secure) {
+        res.status(400).json({
+            status: "Failed"
+        });
+    } else {
+        try {
+            const user = await UserModel.findOne({ email: email });
+            const registered_events = await RegisteredEventsModel.findOne({ forUser: user._id });
+            registered_events.ver = registered_events.ver.concat(toAppend);
+            await registered_events.save();
+            res.status(200).json({
+                status: "Success"
+            });
+        } catch (err) {
+            res.status(400).json({
+                status: "Failed",
+                error: err
+            });
+        }
+    }
+}

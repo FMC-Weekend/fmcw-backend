@@ -48,7 +48,8 @@ exports.loginFunc = (req, res) => {
               const newRegisteredEvents = await registeredEventsModel.create({
                 forUser: newUser._id,
                 registeredEvents: [],
-                verified:false
+                verified:false,
+                ver:[]
               });
               newUser.userCart = newCart._id;
               newUser.userRegisteredEvents = newRegisteredEvents._id;

@@ -178,12 +178,12 @@ async function startApolloServer() {
         email: String!
         name: String!
         role: Int!
-        number: Int!
-        yearOfStudy: Int!
-        instaHandle: String!
-        college: String!
-        userCart: Cart!
-        userRegisteredEvents: RegisteredEvents!
+        number: String
+        yearOfStudy: Int
+        instaHandle: String
+        college: String
+        userCart: Cart
+        userRegisteredEvents: RegisteredEvents
       }
       type Cart {
         forUser: String!
@@ -247,7 +247,14 @@ async function startApolloServer() {
     resolvers: {
       Query: {
         users: async () => {
-          return await UserModel.find({});
+          try {
+            // const users = await UserModel.find({});
+            // console.log(users)
+            return await UserModel.find({});
+          } catch (err) {
+            return "error"
+          }
+
         },
         carts: async () => {
           return await CartModel.find({});
@@ -258,9 +265,9 @@ async function startApolloServer() {
       },
     },
   });
- await server.start();
- 
- app.use("/graphql", expressMiddleware(server));
+  await server.start();
+
+  app.use("/graphql", expressMiddleware(server));
   // Assuming app and slackInteraction are defined and imported elsewhere in your application.
   app.listen(process.env.PORT || 8000, function (err, result) {
     console.log(`Server is running at port! ${process.env.PORT}`);

@@ -3,13 +3,17 @@ const dotenv = require('dotenv');
 dotenv.config({
   path: './config.env'
 });
-
+const UserModel = require("./models/User_m")
+const RegisteredEventsModel = require("./models/registered_events_m")
+const CartModel = require("./models/cart_m")
 // MODULES & IMPORTS
 const express = require("express");
 const app = express();
 const methodOverride = require("method-override");
 const mongoose = require('mongoose');
 const paymentDetails = require('./controllers/pa.controller')
+const { ApolloServer } = require("@apollo/server")
+const { expressMiddleware } = require("@apollo/server/express4")
 // const CryptoJS = require('crypto-js');
 const cors = require('cors');
 
@@ -144,11 +148,7 @@ app.use('/api', contactrout)
 app.use('/api', registeredeventsrout)
 // app.use('/api', parout);
 
-app.all('*', (req, res) => {
-  res.status(404).json({
-    message: 'Given route does not exist'
-  })
-})
+
 // const decrypted = CryptoJS.AES.decrypt(encrypted, "Message").toString(CryptoJS.enc.Utf8);
 // DATABASE CONNECTION
 // const DB = process.env.local_mongo;
@@ -166,8 +166,115 @@ mongoose.connect(DB, {
   console.log(err);
 })
 
-// APP SETUP
-app.listen(process.env.PORT || 8000, function (err, result) {
-  console.log(`Server is running at port! ${process.env.PORT}`);
-  slackInteraction.slackInteraction("#server", `Server is running at port! ${process.env.PORT}`);
-});
+
+async function startApolloServer() {
+  const server = new ApolloServer({
+    typeDefs: `
+      type User {
+        email: String!
+        name: String!
+        role: Int!
+        number: String
+        yearOfStudy: Int
+        instaHandle: String
+        college: String
+        userCart: Cart
+        userRegisteredEvents: RegisteredEvents
+      }
+      type Cart {
+        forUser: String!
+        cartItems: [CartItem!]!
+      }
+      type CartItem {
+        id: Int!
+        img: String!
+        genre: String!
+        Type: String!
+        title: String!
+        special: String!
+        link: String!
+        price: Int!
+        prize: String!
+        color: String!
+        color2: String!
+        content: String!
+        time: String!
+        date: String!
+        desc: String!
+        name: String!
+        img1: String!
+        img2: String!
+        price1: Int!
+        price2: Int!
+        payment: Payment!
+        verifyStatus: Boolean!
+        transactionID: String!
+      }
+      type Payment {
+        status: Int!
+        paymentID: String!
+        paymentRequestID: String!
+      }
+      type RegisteredEvents {
+        forUser: String!
+        registeredEvents: [Event]
+        verified: Boolean
+        ver: [Verification]
+      }
+      type Event {
+       
+        id: Int
+        name: String
+       
+      }
+      
+      type Verification {
+       
+        id: Int
+        status: Boolean
+      
+      }
+      type Query {
+        users: [User!]!
+        carts: [Cart!]!
+        registeredEvents: [RegisteredEvents!]!
+      }
+    `,
+    resolvers: {
+      Query: {
+        users: async () => {
+          try {
+            // const users = await UserModel.find({});
+            // console.log(users)
+            return await UserModel.find({});
+          } catch (err) {
+            return "error"
+          }
+
+        },
+        carts: async () => {
+          return await CartModel.find({});
+        },
+        registeredEvents: async () => {
+          return await RegisteredEventsModel.find({});
+        },
+      },
+    },
+  });
+  await server.start();
+  app.use("/graphql", expressMiddleware(server));
+  app.all('*', (req, res) => {
+    res.status(404).json({
+      message: 'Given route does not exist'
+    })
+  })
+  // Assuming app and slackInteraction are defined and imported elsewhere in your application.
+  app.listen(process.env.PORT || 8000, function (err, result) {
+    console.log(`Server is running at port! ${process.env.PORT}`);
+    slackInteraction.slackInteraction("#server", `Server is running at port! ${process.env.PORT}`);
+  });
+}
+startApolloServer();
+
+
+

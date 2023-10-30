@@ -148,11 +148,7 @@ app.use('/api', contactrout)
 app.use('/api', registeredeventsrout)
 // app.use('/api', parout);
 
-// app.all('*', (req, res) => {
-//   res.status(404).json({
-//     message: 'Given route does not exist'
-//   })
-// })
+
 // const decrypted = CryptoJS.AES.decrypt(encrypted, "Message").toString(CryptoJS.enc.Utf8);
 // DATABASE CONNECTION
 // const DB = process.env.local_mongo;
@@ -221,9 +217,9 @@ async function startApolloServer() {
       }
       type RegisteredEvents {
         forUser: String!
-        registeredEvents: [Event!]!
-        verified: Boolean!
-        ver: [Verification!]!
+        registeredEvents: [Event]
+        verified: Boolean
+        ver: [Verification]
       }
       type Event {
        
@@ -266,15 +262,18 @@ async function startApolloServer() {
     },
   });
   await server.start();
-
   app.use("/graphql", expressMiddleware(server));
+  app.all('*', (req, res) => {
+    res.status(404).json({
+      message: 'Given route does not exist'
+    })
+  })
   // Assuming app and slackInteraction are defined and imported elsewhere in your application.
   app.listen(process.env.PORT || 8000, function (err, result) {
     console.log(`Server is running at port! ${process.env.PORT}`);
     slackInteraction.slackInteraction("#server", `Server is running at port! ${process.env.PORT}`);
   });
 }
-
 startApolloServer();
 
 
